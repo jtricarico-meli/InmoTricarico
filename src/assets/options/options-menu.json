@@ -1,0 +1,17 @@
+[
+    {
+        "icono":"accessibility-outline",
+        "nombre":"ubicacion",
+        "ruta":"/mapa"
+    },
+    {
+      "icono": "alert-circle-outline",
+      "nombre":"Perfil",
+      "ruta":"/perfil"
+    },
+    {
+        "icono":"list-outline",
+        "nombre":"Inmuebles",
+        "ruta":"/inmuebles"
+    }
+  ]

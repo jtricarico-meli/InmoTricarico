@@ -1,6 +1,11 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
