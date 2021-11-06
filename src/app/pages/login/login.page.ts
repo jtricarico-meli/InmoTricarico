@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { LoginView } from '../../interfaces/LoginView';
 import { UsersService } from '../../services/users.service';
 
@@ -16,7 +17,7 @@ export class LoginPage implements OnInit {
     clave: ''
   }
 
-  constructor(private usersService:UsersService) { }
+  constructor(private usersService:UsersService, private navController:NavController) { }
 
   ngOnInit() {
       
@@ -33,6 +34,8 @@ export class LoginPage implements OnInit {
     const perfil = this.getPerfil(token)
 
     console.log("PROPIETARIO: ",perfil)
+
+    this.navController.navigateRoot('/menu',{animated:true})
 
   }
 
