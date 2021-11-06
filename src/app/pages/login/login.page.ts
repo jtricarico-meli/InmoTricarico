@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginView } from '../../interfaces/LoginView';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -9,36 +11,43 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-  constructor(private route:ActivatedRoute, private router:Router) { }
+  user : LoginView = {
+    usuario: '',
+    clave: ''
+  }
+
+  constructor(private usersService:UsersService) { }
 
   ngOnInit() {
-    this.imagen ={
-      src : "../assets/icon/fav-icon-inmo.png",
-      width : "50",
-      height : "50"
-    } 
+      
+  }
 
-    this.formData = new FormGroup({
-      user: new FormControl(),
-      pass: new FormControl()
+  async onSumbit(formulario:NgForm){
+    console.log("Email: ",this.user.usuario)
+    console.log("Password: ",this.user.clave)
+
+    const token = await this.login()
+
+    console.log("TOKEN: ", token)
+
+    const perfil = this.getPerfil(token)
+
+    console.log("PROPIETARIO: ",perfil)
+
+  }
+
+  async login(){
+    return await this.usersService.login(this.user).catch(err => {
+      return err
     })
+
   }
 
-  private imagen: any
-
-  private formData: FormGroup
-
-  onSumbit(){
-    console.log("Email: ",this.formData.value.user)
-    console.log("Password: ",this.formData.value.pass)
-    if(this.checkLogin()){
-      this.router.navigate(['menu'])
-    }
-  }
-
-  checkLogin(){
+  async getPerfil(token: string){
     //esto va a hacer uso del service para checkear el login en el backend
-    return true
+    return await this.usersService.getPerfil(token).catch(err => {
+      return err
+    })
   }
 
 }
