@@ -31,11 +31,11 @@ export class LoginPage implements OnInit {
 
     console.log("TOKEN: ", token)
 
-    const perfil = this.getPerfil(token)
+    const perfil = this.getPerfil()
 
     console.log("PROPIETARIO: ",perfil)
 
-    this.navController.navigateRoot('/menu',{animated:true})
+    //this.navController.navigateRoot('/menu',{animated:true})
 
   }
 
@@ -46,9 +46,9 @@ export class LoginPage implements OnInit {
 
   }
 
-  async getPerfil(token: string){
+  async getPerfil(){
     //esto va a hacer uso del service para checkear el login en el backend
-    return await this.usersService.getPerfil(token).catch(err => {
+    return await this.usersService.getPerfil().catch(err => {
       return err
     })
   }
