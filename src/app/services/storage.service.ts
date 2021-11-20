@@ -20,23 +20,27 @@ export class StorageService {
 
 
    public set(key: string, value: any){
-     this.storage?.set(key,value)
+    this.storage?.set(key,value)
    }
 
    public get(key: string){
      return this.storage?.get(key)
    }
 
-   public clear(){
-    return this.storage?.clear()
+   public async getToken(){
+    return await this.storage?.get('token')
   }
 
-  public keys(){
-    return this.storage?.keys()
+   public async clear(){
+    return await this.storage?.clear()
   }
 
-  public length(key: string){
-    return this.storage?.length()
+  public async keys(){
+    return await this.storage?.keys()
+  }
+
+  public async length(key: string){
+    return await this.storage?.length()
   }
 
   public async logValues(){

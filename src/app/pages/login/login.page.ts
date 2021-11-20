@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { LoginView } from '../../interfaces/LoginView';
 import { UsersService } from '../../services/users.service';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -17,31 +18,37 @@ export class LoginPage implements OnInit {
     clave: ''
   }
 
-  constructor(private usersService:UsersService, private navController:NavController) { }
+  constructor(private usersService:UsersService, private tokenService:TokenService, private router:Router, private loadingController: LoadingController) { }
 
   ngOnInit() {
-      
+    if(this.tokenService.getToken()){
+      this.router.navigate(['/menu'])
+    }
   }
 
   async onSumbit(formulario:NgForm){
-    console.log("Email: ",this.user.usuario)
-    console.log("Password: ",this.user.clave)
-
+    const loading = await this.loadingController.create({
+      message: 'Iniciando sesión',
+      duration: 500
+    });
+    await loading.present();
+    await loading.onDidDismiss();
     const token = await this.login()
+    console.log(token)
 
-    console.log("TOKEN: ", token)
-
-    const perfil = this.getPerfil()
-
-    console.log("PROPIETARIO: ",perfil)
-
-    //this.navController.navigateRoot('/menu',{animated:true})
+    if(token){
+      this.router.navigate(['/menu'])
+    }
+    else{
+      
+    }
+    
 
   }
 
   async login(){
     return await this.usersService.login(this.user).catch(err => {
-      return err
+      return null
     })
 
   }
