@@ -18,11 +18,13 @@ export class LoginPage implements OnInit {
     clave: ''
   }
 
-  constructor(private usersService:UsersService, private tokenService:TokenService, private router:Router, private loadingController: LoadingController) { }
+  constructor(private usersService:UsersService, private token:TokenService, private router:Router, private loadingController: LoadingController) { }
 
-  ngOnInit() {
-    if(this.tokenService.getToken()){
-      this.router.navigate(['/menu'])
+  async ngOnInit() {
+    if(await this.token.getToken()){
+      this.router.navigate(['/inicio'])
+    }else{
+      this.router.navigate(['/login'])
     }
   }
 

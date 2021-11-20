@@ -5,9 +5,8 @@ import { LoginGuard } from './guards/login.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'inicio',
     pathMatch: 'full',
-    canLoad: [LoginGuard]
   },
   {
     path: 'inmuebles',
@@ -15,8 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule),
-    canLoad: [LoginGuard]
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: 'mapa',
@@ -31,9 +29,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
+    path: 'inicio',
+    loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
+  },
+  {
     path: '**',
     pathMatch: 'prefix',
-    redirectTo: 'login',
+    redirectTo: 'inicio',
   },
 ];
 
