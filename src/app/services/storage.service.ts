@@ -36,6 +36,10 @@ export class StorageService {
     return await this._storage?.clear()
   }
 
+  public remove(id){
+    return this._storage?.remove(id)
+  }
+
   public keys(){
     return this._storage?.keys()
   }

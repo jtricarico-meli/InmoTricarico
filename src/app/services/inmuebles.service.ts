@@ -56,7 +56,8 @@ export class InmueblesService {
       authorization: `Bearer ${await this.getToken()}`
 
     };
-    //Obtener todos los inmuebles
+    //Editar un inmuebles
+    console.log(inmueble)
     return new Promise((resolve, reject) =>
       this.httpClient.put('http://practicastuds.ulp.edu.ar/api/Inmuebles/' + inmueble.Id, inmueble, { headers }
       ).subscribe(res => resolve(res), err => reject(err)));
@@ -69,7 +70,8 @@ export class InmueblesService {
       authorization: `Bearer ${await this.getToken()}`
 
     };
-    //Obtener todos los inmuebles
+    //Agregar un inmuebles
+    console.log(inmueble)
     return new Promise((resolve, reject) =>
       this.httpClient.post('http://practicastuds.ulp.edu.ar/api/Inmuebles', inmueble, { headers }
       ).subscribe(res => resolve(res), err => reject(err)));

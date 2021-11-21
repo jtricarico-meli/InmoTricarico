@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActionSheetController, AlertController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ToastController } from '@ionic/angular';
 import { observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { UsersService } from '../../services/users.service';
@@ -11,7 +11,7 @@ import { UsersService } from '../../services/users.service';
 })
 export class PerfilPage implements OnInit {
 
-  constructor(private usersService: UsersService, private alertController: AlertController) {}
+  constructor(private usersService: UsersService, private alertController: AlertController, private toastController: ToastController) {}
 
   public user: User
   flagView = false
@@ -60,8 +60,13 @@ export class PerfilPage implements OnInit {
               Clave: this.user.clave,
               GrupoId: this.user.grupoId,
               id: this.user.id
-            }).then((res: User) => {
+            }).then(async (res: User) => {
               this.user = res
+              const toast = await this.toastController.create({
+                message: 'Perfil actualizado.',
+                duration: 2000
+              })
+              toast.present()
             })
           }
         }

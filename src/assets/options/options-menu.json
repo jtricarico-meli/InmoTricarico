@@ -1,17 +1,12 @@
 [
-    {
-        "icono":"navigate",
-        "nombre":"ubicacion",
-        "ruta":"/mapa"
-    },
-    {
-      "icono": "person",
-      "nombre":"Perfil",
-      "ruta":"/perfil"
-    },
-    {
-        "icono":"home",
-        "nombre":"Inmuebles",
-        "ruta":"/inmuebles"
-    }
-  ]
+  {
+    "icono": "person",
+    "nombre": "Perfil",
+    "ruta": "/perfil"
+  },
+  {
+    "icono": "home",
+    "nombre": "Inmuebles",
+    "ruta": "/inmuebles"
+  }
+]

@@ -17,8 +17,8 @@ export interface InmuebleCamel
     Id: number,
     Direccion: string,
     Superficie: number,
-    Latitud: string,
-    Longitud: string,
+    Latitud: number,
+    Longitud: number,
     PropietarioId: number,
     GrupoId: number
 }

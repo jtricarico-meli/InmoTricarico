@@ -12,6 +12,11 @@
             <ion-icon slot="start" [name]="boton.icono" color="tertiary"></ion-icon>
               {{boton.nombre}}
           </ion-item>
+         
+          <ion-item (click)="logOut()">
+            <ion-icon slot="start" name="log-out" color="warning"></ion-icon>
+              Cerrar Sesión
+          </ion-item>
         </ion-menu-toggle>
       </ion-list>
     </ion-content>

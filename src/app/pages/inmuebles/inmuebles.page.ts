@@ -4,7 +4,7 @@ import { Inmueble, InmuebleCamel } from '../../interfaces/inmueble';
 import { InmueblesService } from '../../services/inmuebles.service';
 import { User } from '../../interfaces/user';
 import { TokenService } from '../../services/token.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 
 declare var mapboxgl : any 
 
@@ -15,7 +15,7 @@ declare var mapboxgl : any
 })
 export class InmueblesPage implements OnInit, AfterViewInit {
 
-  constructor(private inmueblesService: InmueblesService, private tokenService: TokenService, private alertController:AlertController) { }
+  constructor(private inmueblesService: InmueblesService, private tokenService: TokenService, private alertController:AlertController, private toastController: ToastController) { }
   
 
   public myInmuebles: Inmueble[]
@@ -92,19 +92,24 @@ export class InmueblesPage implements OnInit, AfterViewInit {
           handler: (cambios) => {
             console.log(cambios)
             var propiedad: InmuebleCamel ={
-              Superficie: cambios.Superficie,
+              Superficie: Number(cambios.Superficie),
               Id: this.inmuebleSelected.id,
               Direccion: cambios.Direccion,
-              Latitud: cambios.Latitud,
-              Longitud: cambios.Longitud,
-              PropietarioId: this.inmuebleSelected.id,
+              Latitud: Number(cambios.Latitud),
+              Longitud: Number(cambios.Longitud),
+              PropietarioId: this.inmuebleSelected.propietarioId,
               GrupoId: this.inmuebleSelected.grupoId
             }
 
-            this.inmueblesService.putInmuebles(propiedad).then((res: Inmueble)=>{
+            this.inmueblesService.putInmuebles(propiedad).then(async (res: Inmueble)=>{
               this.inmuebleSelected = res
+              const toast = await this.toastController.create({
+                message: 'Propiedad actualizada',
+                duration: 2000
+              })
+              toast.present()
             })
-
+            this.showMap()
         
           }
         }
@@ -113,6 +118,76 @@ export class InmueblesPage implements OnInit, AfterViewInit {
 
     await alert.present()
   }
+
+  async addInmueble(){
+    const alert = await this.alertController.create({
+      header: 'Editar propiedad',
+      inputs: [
+        {
+          placeholder: 'Dirección',
+          name: 'Direccion',
+          type: 'text',
+        },
+        {
+          placeholder: 'Superficie',
+          name: 'Superficie',
+          type: 'number',
+          min: 1,
+        },
+        {
+          placeholder: 'Latitud',
+          name: 'Latitud',
+          type: 'number',
+          min: 1,
+        },
+        {
+          placeholder: 'Longitud',
+          name: 'Longitud',
+          type: 'number',
+          min: 1,
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'warning',
+        }, 
+        {
+          cssClass: 'success',
+          text: 'Guardar',
+          handler: (cambios) => {
+            console.log(cambios)
+            
+            var nuevoInmueble: InmuebleCamel ={
+              Superficie: Number(cambios.Superficie),
+              Id: undefined,
+              Direccion: cambios.Direccion,
+              Latitud: Number(cambios.Latitud),
+              Longitud: Number(cambios.Longitud),
+              PropietarioId: this.inmuebleSelected.propietarioId,
+              GrupoId: this.inmuebleSelected.grupoId
+            }
+            this.inmueblesService.postInmuebles(nuevoInmueble).then(async (res: Inmueble)=>{
+              this.myInmuebles.push(res)
+
+              const toast = await this.toastController.create({
+                message: 'Nueva propiedad cargada!',
+                duration: 2000
+              })
+              toast.present()
+            })
+        
+          }
+        }
+      ]
+    });
+
+    await alert.present()
+  }
+  
+
+
 
   async ngAfterViewInit() {
     
@@ -127,13 +202,18 @@ export class InmueblesPage implements OnInit, AfterViewInit {
 
     this.inmuebleSelected = this.myInmuebles.find(inmueble => inmueble.id == event.detail.value)
     
-    const ubicacion:number[] =[this.inmuebleSelected.longitud,this.inmuebleSelected.latitud]
+    await this.showMap()
+  }
+
+  async showMap(){
+    const ubicacion:number[] = [this.inmuebleSelected.longitud,this.inmuebleSelected.latitud]
     
     await this.createMap(ubicacion)
 
     this.customizeMap()
 
     this.addMarkerMap(ubicacion)
+
   }
 
   createMap(ubicacion:number[]){
