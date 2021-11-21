@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, ToastController } from '@ionic/angular';
 import { LoginView } from '../../interfaces/LoginView';
 import { UsersService } from '../../services/users.service';
 import { TokenService } from '../../services/token.service';
@@ -19,7 +19,7 @@ export class LoginPage implements OnInit {
     clave: ''
   }
 
-  constructor(private usersService: UsersService, private token: TokenService, private router: Router, private loadingController: LoadingController) { }
+  constructor(private usersService: UsersService, private token: TokenService, private router: Router, private loadingController: LoadingController, private toastController:ToastController) { }
 
   async ngOnInit() {
     await this.token.checkToken().then((isValidToken) => {
@@ -36,23 +36,35 @@ export class LoginPage implements OnInit {
     });
     await loading.present();
     await loading.onDidDismiss();
-    const token = await this.login()
+    const [token, err] = await this.login()
     console.log(token)
 
     if (token) {
       this.router.navigate(['/menu'])
     }
     else {
-
+      console.log(err)
+      const toast = await this.toastController.create({
+        message: err,
+        duration: 5000
+      })
+      toast.present()
     }
-
-
+    
   }
 
   async login() {
-    return await this.usersService.login(this.user).catch(err => {
-      return null
+    var error: any
+    var token: any
+    await this.usersService.login(this.user).then((res)=>{
+      token = res
+    }).catch(err => {
+      console.log(err)
+      error = err
     })
+
+    return [token, error]
+
 
   }
 
