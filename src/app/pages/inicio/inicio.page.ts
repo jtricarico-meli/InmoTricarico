@@ -13,11 +13,15 @@ export class InicioPage implements OnInit {
 
   async ngOnInit() {
     await this.delay(2000)
-    if(await this.token.getToken()!=null){
-      this.router.navigate(['/menu'])
-    }else{
-      this.router.navigate(['/login'])
-    }
+    
+    await this.token.checkToken().then((isValidToken) => {
+      if (isValidToken) {
+        this.router.navigate(['/menu'])
+      } else {
+        this.router.navigate(['/login'])
+      }
+    })
+  
   }
 
   async delay(ms: number) {

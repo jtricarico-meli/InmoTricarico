@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes, CanLoad } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
@@ -10,7 +11,8 @@ const routes: Routes = [
   },
   {
     path: 'inmuebles',
-    loadChildren: () => import('./pages/inmuebles/inmuebles.module').then( m => m.InmueblesPageModule)
+    loadChildren: () => import('./pages/inmuebles/inmuebles.module').then( m => m.InmueblesPageModule),
+    canActivate : [AuthGuard]
   },
   {
     path: 'login',
@@ -18,15 +20,18 @@ const routes: Routes = [
   },
   {
     path: 'mapa',
-    loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule)
+    loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule),
+    canActivate : [AuthGuard]
   },
   {
     path: 'menu',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
+    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule),
+    canLoad : [AuthGuard]
   },
   {
     path: 'perfil',
-    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule),
+    canActivate : [AuthGuard]
   },
   {
     path: 'inicio',

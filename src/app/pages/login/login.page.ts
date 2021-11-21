@@ -5,6 +5,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { LoginView } from '../../interfaces/LoginView';
 import { UsersService } from '../../services/users.service';
 import { TokenService } from '../../services/token.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -13,49 +14,49 @@ import { TokenService } from '../../services/token.service';
 })
 export class LoginPage implements OnInit {
 
-  user : LoginView = {
+  user: LoginView = {
     usuario: '',
     clave: ''
   }
 
-  constructor(private usersService:UsersService, private token:TokenService, private router:Router, private loadingController: LoadingController) { }
+  constructor(private usersService: UsersService, private token: TokenService, private router: Router, private loadingController: LoadingController) { }
 
   async ngOnInit() {
-    if(await this.token.getToken()){
-      this.router.navigate(['/inicio'])
-    }else{
-      this.router.navigate(['/login'])
-    }
+    await this.token.checkToken().then((isValidToken) => {
+      if (isValidToken) {
+        this.router.navigate(['/menu'])
+      }
+    })
   }
 
-  async onSumbit(formulario:NgForm){
+  async onSumbit(formulario: NgForm) {
     const loading = await this.loadingController.create({
       message: 'Iniciando sesión',
-      duration: 500
+      duration: 1000
     });
     await loading.present();
     await loading.onDidDismiss();
     const token = await this.login()
     console.log(token)
 
-    if(token){
+    if (token) {
       this.router.navigate(['/menu'])
     }
-    else{
-      
+    else {
+
     }
-    
+
 
   }
 
-  async login(){
+  async login() {
     return await this.usersService.login(this.user).catch(err => {
       return null
     })
 
   }
 
-  async getPerfil(){
+  async getPerfil() {
     //esto va a hacer uso del service para checkear el login en el backend
     return await this.usersService.getPerfil().catch(err => {
       return err

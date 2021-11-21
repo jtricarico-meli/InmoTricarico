@@ -1,15 +1,28 @@
 <app-header titulo="Menu principal" isMenu="true"></app-header>
 
 <ion-content>
-    <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-          <ion-card-title>Card Title</ion-card-title>
-        </ion-card-header>
-      
-        <ion-card-content>
-          Keep close to Nature's heart... and break clear away, once in awhile,
-          and climb a mountain or spend a week in the woods. Wash your spirit clean.
-        </ion-card-content>
-      </ion-card>
+  <ion-card href="/perfil">
+    <ion-card-header>
+      <ion-card-title>Perfil</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <img src="../../../assets/icon/perfil.jpg" alt="Perfil" slot="start">
+      <br>
+      <h2 align="center">Ver y editar mi perfil</h2>
+    </ion-card-content>
+
+  </ion-card>
+  <ion-card href="/inmuebles">
+    <ion-card-header>
+      <ion-card-title>Mis inmuebles</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <img src="../../../assets/icon/inmuebles.jpg" alt="Inmuebles" slot="start">
+      <br>
+      <h2 align="center">Ver, agregar y editar mis inmuebles</h2>
+    </ion-card-content>
+
+  </ion-card>
 </ion-content>

@@ -18,8 +18,39 @@ export class TokenService {
     return JSON.parse(jsonPayload);
   };
 
-  async getToken(): Promise<string>{
-    return await this.storage.get('token')
+  async checkToken(): Promise<boolean> {
+  var res = false
+  var tokenPromise : Promise<string> = await this.storage.get('token')
+  
+  if(tokenPromise){
+    await this.storage.get('token').then((token)=>{
+      if(token){
+       const tokenParsed = this.parseJwt(token)
+       var fechaExp: Date = new Date(tokenParsed.exp*1000)
+       var today = new Date()
+       res = fechaExp > today
+      }
+      return res
+      
+    }).catch((err) => console.log(err))
+   }
+   return res
   }
+
+  async getIdFromToken() {
+    var IdToken = 0
+    var tokenPromise : Promise<string> = await this.storage.get('token')
+    
+    if(tokenPromise){
+      await this.storage.get('token').then((token)=>{
+        if(token){
+         const tokenParsed = this.parseJwt(token)
+         IdToken=tokenParsed.Id
+        }
+        
+      }).catch((err) => console.log(err))
+     }
+     return IdToken
+    }
 
 }

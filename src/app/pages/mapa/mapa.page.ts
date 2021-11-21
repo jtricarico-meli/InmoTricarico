@@ -17,7 +17,7 @@ export class MapaPage implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     mapboxgl.accessToken = 'pk.eyJ1IjoicGluaW5vMjIiLCJhIjoiY2t2dTM2ZGx4NTZydTJ1bnV1cmRhMXZ4cSJ9.LzwtqBx_vu5GhO-kacYA_g'
 
-    const ubicacion:number[] =[-66.338965,-33.3004805]
+    const ubicacion:number[] =[-66.3076719,-33.2711688]
     
     this.createMap(ubicacion)
 
@@ -35,7 +35,7 @@ export class MapaPage implements OnInit, AfterViewInit {
       center: ubicacion,
       style: 'mapbox://styles/mapbox/light-v10',
       zoom: 15.5,
-      pitch: 35,
+      pitch: 80,
       container: 'map',
       antialias: false
     })

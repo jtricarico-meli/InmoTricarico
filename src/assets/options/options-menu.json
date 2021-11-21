@@ -1,16 +1,16 @@
 [
     {
-        "icono":"accessibility-outline",
+        "icono":"navigate",
         "nombre":"ubicacion",
         "ruta":"/mapa"
     },
     {
-      "icono": "alert-circle-outline",
+      "icono": "person",
       "nombre":"Perfil",
       "ruta":"/perfil"
     },
     {
-        "icono":"list-outline",
+        "icono":"home",
         "nombre":"Inmuebles",
         "ruta":"/inmuebles"
     }

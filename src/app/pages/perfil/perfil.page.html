@@ -1,5 +1,43 @@
 <app-header titulo="Perfil"></app-header>
 
 <ion-content>
+  <ion-card>
+    <ion-list *ngIf="flagView">
+      <ion-list-header>
+          <ion-card-title>Información de perfil</ion-card-title>
+        
+      </ion-list-header>
+
+      <ion-item-group>
+        <ion-item-divider>
+            <ion-card-subtitle>E-mail / Nombre de usuario</ion-card-subtitle>
+        </ion-item-divider>
+
+        <ion-item lines="none">
+          <ion-label>{{user.email}}</ion-label>
+        </ion-item>
+
+        <ion-item-divider>
+          <ion-card-subtitle>Nombre y apellido</ion-card-subtitle>
+        </ion-item-divider>
+
+        <ion-item lines="none">
+          <ion-label>{{user.nombre}}</ion-label>
+        </ion-item>
+
+        <ion-item-divider>
+          <ion-card-subtitle>Teléfono</ion-card-subtitle>
+        </ion-item-divider>
+
+        <ion-item lines="none">
+          <ion-label>{{user.telefono}}</ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+  </ion-card>
+
+  
+  <ion-button expand="block" color="tertiary" (click)="editarPerfil()">Editar Perfil</ion-button>
+    
 
 </ion-content>

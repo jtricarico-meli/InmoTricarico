@@ -46,9 +46,10 @@ export class UsersService {
       authorization: `Bearer ${await this.getToken()}`
 
     };
+
     //enviar peticion http con credenciales
     return new Promise((resolve, reject) =>
-      this.httpClient.put('http://practicastuds.ulp.edu.ar/api/Propietarios/', perfil, { headers }
+      this.httpClient.put('http://practicastuds.ulp.edu.ar/api/Propietarios/'+perfil.id , perfil, { headers }
       ).subscribe(res => resolve(res), err => reject(err)));
   }
 
