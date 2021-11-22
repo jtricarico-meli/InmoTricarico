@@ -77,6 +77,19 @@ export class InmueblesService {
       ).subscribe(res => resolve(res), err => reject(err)));
   }
 
+  public async deleteInmueble(id: number) {
+    //crear headers para enviar json en body y agregar token
+    const headers = {
+      contentType: 'application/json',
+      authorization: `Bearer ${await this.getToken()}`
+
+    };
+    //Agregar un inmuebles
+    return new Promise((resolve, reject) =>
+      this.httpClient.delete('http://practicastuds.ulp.edu.ar/api/Inmuebles/'+id, { headers }
+      ).subscribe(res => resolve(res), err => reject(err)));
+  }
+
   private async getToken(): Promise<string> {
     return await this.storage.get('token')
   }
