@@ -57,7 +57,6 @@ export class PerfilPage implements OnInit {
               Nombre: cambios.Nombre,
               Telefono: cambios.Telefono,
               Email: this.user.email,
-              Clave: this.user.clave,
               GrupoId: this.user.grupoId,
               id: this.user.id
             }).then(async (res: User) => {
