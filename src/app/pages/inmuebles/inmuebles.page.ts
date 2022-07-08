@@ -18,28 +18,30 @@ export class InmueblesPage implements OnInit, AfterViewInit {
   constructor(private inmueblesService: InmueblesService, private tokenService: TokenService, private alertController: AlertController, private toastController: ToastController) { }
 
 
-  public myInmuebles: Inmueble[]
+  public myInmuebles: any[] 
 
   propietarioId: any
 
   flagHiddenMap = true
 
   inmuebleSelected: Inmueble = {
-    superficie: 0,
     latitud: 0,
     longitud: 0,
-    id: 0,
+    ID: 0,
     direccion: '',
-    propietarioId: 0,
     propietario: undefined,
-    grupoId: 0
+    ambientes: 0,
+    tipo: '',
+    uso: '',
+    precio: 0,
+    disponible: false
   }
 
   private map: any
 
   async ngOnInit() {
     await this.tokenService.getIdFromToken().then(tokenParsed => {
-      this.propietarioId = tokenParsed
+      this.propietarioId = Number(tokenParsed)
     })
 
     await this.getMyInmuebles()
@@ -58,30 +60,49 @@ export class InmueblesPage implements OnInit, AfterViewInit {
       inputs: [
         {
           placeholder: 'Dirección',
-          name: 'Direccion',
+          name: 'direccion',
           type: 'text',
           value: this.inmuebleSelected.direccion
         },
         {
-          placeholder: 'Superficie',
-          name: 'Superficie',
-          type: 'number',
-          min: 1,
-          value: this.inmuebleSelected.superficie
-        },
-        {
           placeholder: 'Latitud',
-          name: 'Latitud',
+          name: 'latitud',
           type: 'number',
           min: 1,
           value: this.inmuebleSelected.latitud
         },
         {
           placeholder: 'Longitud',
-          name: 'Longitud',
+          name: 'longitud',
           type: 'number',
           min: 1,
           value: this.inmuebleSelected.longitud
+        },
+        {
+          placeholder: 'Ambientes',
+          name: 'ambientes',
+          type: 'number',
+          min: 1,
+          value: this.inmuebleSelected.ambientes
+        },
+        {
+          placeholder: 'Tipo (casa, depto)',
+          name: 'tipo',
+          type: 'text',
+          value: this.inmuebleSelected.tipo
+        },
+        {
+          placeholder: 'Uso (comercial, personal, laboral)',
+          name: 'uso',
+          type: 'text',
+          value: this.inmuebleSelected.uso
+        },
+        {
+          placeholder: 'Precio',
+          name: 'precio',
+          type: 'number',
+          min: 1,
+          value: this.inmuebleSelected.precio
         },
       ],
       buttons: [
@@ -95,25 +116,29 @@ export class InmueblesPage implements OnInit, AfterViewInit {
           text: 'Guardar',
           handler: (cambios) => {
             console.log(cambios)
-            var propiedad: InmuebleCamel = {
-              Superficie: Number(cambios.Superficie),
-              Id: this.inmuebleSelected.id,
-              Direccion: cambios.Direccion,
-              Latitud: Number(cambios.Latitud),
-              Longitud: Number(cambios.Longitud),
-              PropietarioId: this.inmuebleSelected.propietarioId,
-              GrupoId: this.inmuebleSelected.grupoId
+            var propiedad: Inmueble = {
+              ID: this.inmuebleSelected.ID,
+              direccion: cambios.direccion,
+              ambientes: Number(cambios.ambientes),
+              tipo: cambios.tipo,
+              uso: cambios.uso,
+              precio: Number(cambios.precio),
+              disponible: true,
+              propietario: this.propietarioId,
+              latitud: Number(cambios.latitud),
+              longitud: Number(cambios.longitud)
             }
 
             this.inmueblesService.putInmuebles(propiedad).then(async (res: Inmueble) => {
               this.inmuebleSelected = res
+              await this.getMyInmuebles()
               const toast = await this.toastController.create({
                 message: 'Propiedad actualizada',
                 duration: 2000
               })
               toast.present()
+              this.showMap()
             })
-            this.showMap()
 
           }
         }
@@ -139,7 +164,7 @@ export class InmueblesPage implements OnInit, AfterViewInit {
         {
           text: 'Okay',
           handler: async () => {
-            this.inmueblesService.deleteInmueble(this.inmuebleSelected.id).then(async (res) => {
+            this.inmueblesService.deleteInmueble(this.inmuebleSelected.ID).then(async (res) => {
               await this.getMyInmuebles()
 
               this.flagHiddenMap=true
@@ -161,24 +186,40 @@ export class InmueblesPage implements OnInit, AfterViewInit {
       inputs: [
         {
           placeholder: 'Dirección',
-          name: 'Direccion',
+          name: 'direccion',
           type: 'text',
         },
         {
-          placeholder: 'Superficie',
-          name: 'Superficie',
-          type: 'number',
-          min: 1,
-        },
-        {
           placeholder: 'Latitud',
-          name: 'Latitud',
+          name: 'latitud',
           type: 'number',
           min: 1,
         },
         {
           placeholder: 'Longitud',
-          name: 'Longitud',
+          name: 'longitud',
+          type: 'number',
+          min: 1,
+        },
+        {
+          placeholder: 'Ambientes',
+          name: 'ambientes',
+          type: 'number',
+          min: 1,
+        },
+        {
+          placeholder: 'Tipo (casa, depto)',
+          name: 'tipo',
+          type: 'text',
+        },
+        {
+          placeholder: 'Uso (comercial, personal, laboral)',
+          name: 'uso',
+          type: 'text',
+        },
+        {
+          placeholder: 'Precio',
+          name: 'precio',
           type: 'number',
           min: 1,
         },
@@ -195,14 +236,17 @@ export class InmueblesPage implements OnInit, AfterViewInit {
           handler: (cambios) => {
             console.log(cambios)
 
-            var nuevoInmueble: InmuebleCamel = {
-              Superficie: Number(cambios.Superficie),
-              Id: undefined,
-              Direccion: cambios.Direccion,
-              Latitud: Number(cambios.Latitud),
-              Longitud: Number(cambios.Longitud),
-              PropietarioId: this.inmuebleSelected.propietarioId,
-              GrupoId: this.inmuebleSelected.grupoId
+            var nuevoInmueble: Inmueble = {
+              ID: undefined,
+              direccion: cambios.direccion,
+              ambientes: Number(cambios.ambientes),
+              tipo: cambios.tipo,
+              uso: cambios.uso,
+              precio: Number(cambios.precio),
+              disponible: true,
+              propietario: this.propietarioId,
+              latitud: Number(cambios.latitud),
+              longitud: Number(cambios.longitud)
             }
             this.inmueblesService.postInmuebles(nuevoInmueble).then(async (res: Inmueble) => {
               this.myInmuebles.push(res)
@@ -236,7 +280,9 @@ export class InmueblesPage implements OnInit, AfterViewInit {
   async showInfo(event) {
     this.flagHiddenMap = false
 
-    this.inmuebleSelected = this.myInmuebles.find(inmueble => inmueble.id == event.detail.value)
+    await this.inmueblesService.getInmueble(event.detail.value).then((res : Inmueble) =>{
+      this.inmuebleSelected = res
+    })
 
     await this.showMap()
   }

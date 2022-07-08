@@ -2,23 +2,25 @@ import { User } from "./user";
 
 export interface Inmueble 
 {
-    id: number,
+    ID: number,
     direccion: string,
-    superficie: number,
-    latitud: number,
-    longitud: number,
-    propietarioId: number,
-    propietario: User
-    grupoId: number
+    ambientes: number,
+    tipo: string,
+    uso: string,
+    precio: number,
+    disponible: boolean
+    latitud: number
+    longitud: number
+    propietario: string
 }
 
 export interface InmuebleCamel 
 {
     Id: number,
     Direccion: string,
-    Superficie: number,
-    Latitud: number,
-    Longitud: number,
-    PropietarioId: number,
-    GrupoId: number
+    Ambientes: number,
+    Tipo: string,
+    Uso: string,
+    Precio: number,
+    Disponible: boolean
 }

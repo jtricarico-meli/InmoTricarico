@@ -1,9 +1,10 @@
 export interface User 
 {
-    id: number,
+    ID: number,
     nombre: string,
-    email: string,
-    clave: string,
+    apellido: string,
+    mail: string,
+    password: string,
     telefono: number,
     grupoId: number
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Token } from '../interfaces/LoginView';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -23,10 +24,10 @@ export class TokenService {
     var tokenPromise: Promise<string> = await this.storage.get('token')
 
     if (tokenPromise) {
-      await this.storage.get('token').then((token) => {
+      await this.storage.get('token').then((token : Token) => {
         if (token) {
-          const tokenParsed = this.parseJwt(token)
-          var fechaExp: Date = new Date(tokenParsed.exp * 1000)
+          const tokenParsed = this.parseJwt(token.token)
+          var fechaExp: Date = new Date(tokenParsed.expired_at)
           var today = new Date()
           res = fechaExp > today
         }
@@ -42,10 +43,10 @@ export class TokenService {
     var tokenPromise: Promise<string> = await this.storage.get('token')
 
     if (tokenPromise) {
-      await this.storage.get('token').then((token) => {
+      await this.storage.get('token').then((token: Token) => {
         if (token) {
-          const tokenParsed = this.parseJwt(token)
-          IdToken = tokenParsed.Id
+          const tokenParsed = this.parseJwt(token.token)
+          IdToken = tokenParsed.username
         }
 
       }).catch((err) => console.log(err))

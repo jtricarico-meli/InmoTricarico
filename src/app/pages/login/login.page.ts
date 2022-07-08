@@ -15,8 +15,8 @@ import { StorageService } from '../../services/storage.service';
 export class LoginPage implements OnInit {
 
   user: LoginView = {
-    usuario: '',
-    clave: ''
+    mail: '',
+    password: ''
   }
 
   constructor(private usersService: UsersService, private token: TokenService, private router: Router, private loadingController: LoadingController, private toastController:ToastController) { }

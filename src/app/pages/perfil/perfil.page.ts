@@ -28,10 +28,16 @@ export class PerfilPage implements OnInit {
       header: 'Editar mi perfil',
       inputs: [
         {
-          placeholder: 'Nombre y apellido',
+          placeholder: 'Nombre',
           name: 'Nombre',
           type: 'text',
           value: this.user.nombre
+        },
+        {
+          placeholder: 'Apellido',
+          name: 'Apellido',
+          type: 'text',
+          value: this.user.apellido
         },
         {
           placeholder: 'Teléfono',
@@ -51,14 +57,16 @@ export class PerfilPage implements OnInit {
           cssClass: 'tertiary',
           text: 'Guardar',
           handler: (cambios) => {
-            this.user.nombre = cambios.nombre
-            this.user.telefono = cambios.telefono
+            this.user.nombre = cambios.Nombre
+            this.user.apellido = cambios.Apellido
+            this.user.telefono = cambios.Telefono
             this.usersService.setPerfil({
-              Nombre: cambios.Nombre,
-              Telefono: cambios.Telefono,
-              Email: this.user.email,
-              GrupoId: this.user.grupoId,
-              id: this.user.id
+              nombre: cambios.Nombre,
+              apellido: cambios.Apellido,
+              telefono: cambios.Telefono,
+              mail: this.user.mail,
+              grupoId: this.user.grupoId,
+              ID: this.user.ID
             }).then(async (res: User) => {
               this.user = res
               const toast = await this.toastController.create({

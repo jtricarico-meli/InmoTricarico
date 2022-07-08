@@ -1,4 +1,8 @@
 export interface LoginView{
-    usuario: string,
-    clave: string
+    mail: string,
+    password: string
+}
+
+export interface Token{
+    token: string
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoginView } from '../interfaces/LoginView';
+import { LoginView, Token } from '../interfaces/LoginView';
 import { StorageService } from './storage.service';
 @Injectable({
   providedIn: 'root'
@@ -12,49 +12,50 @@ export class UsersService {
   public login(credenciales: LoginView): Promise<string> {
     //crear headers para enviar json en body
     const headers = {
-      contentType: 'application/json'
+      "Content-Type": 'application/json'
     }
 
     //enviar peticion http con credenciales
     return new Promise<string>((resolve, reject) =>
-      this.httpClient.post('http://practicastuds.ulp.edu.ar/api/Propietarios/login',
-        credenciales, { headers, responseType: 'text' }
+      this.httpClient.post('http://localhost:8080/login',
+        credenciales, { headers }
       ).subscribe(async res => {
         //guarda el token en el storage local
         await this.storage.set('token',res)
-        resolve(res)
+        resolve("token")
       }, err => reject(err)))
   }
 
   public async getPerfil() {
     //crear headers para enviar json en body y agregar token
     const headers = {
-      contentType: 'application/json',
-      authorization: `Bearer ${await this.getToken()}`
-
+      "Content-Type": 'application/json',
+      "Authorization" : `Bearer ${await this.getToken()}`
     };
     //enviar peticion http con credenciales
     return new Promise((resolve, reject) =>
-      this.httpClient.get('http://practicastuds.ulp.edu.ar/api/Propietarios/', { headers }
+      this.httpClient.get('http://localhost:8080/propietario/', { headers }
       ).subscribe(res => resolve(res), err => reject(err)));
   }
 
   public async setPerfil(perfil: any) {
     //crear headers para enviar json en body y agregar token
     const headers = {
-      contentType: 'application/json',
-      authorization: `Bearer ${await this.getToken()}`
+      "Content-Type": 'application/json',
+      "Authorization" : `Bearer ${await this.getToken()}`
 
     };
 
     //enviar peticion http con credenciales
     return new Promise((resolve, reject) =>
-      this.httpClient.put('http://practicastuds.ulp.edu.ar/api/Propietarios/'+perfil.id , perfil, { headers }
+      this.httpClient.put('http://localhost:8080/propietario/'+perfil.ID , perfil, { headers }
       ).subscribe(res => resolve(res), err => reject(err)));
   }
 
-  private async getToken(): Promise<string>{
-    return await this.storage.get('token')
+  private async getToken(): Promise<string> {
+    return await this.storage.get('token').then((token: Token) => {
+      return token.token;
+    });
   }
 
 
